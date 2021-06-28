@@ -6,15 +6,14 @@ from SpotifyPlayerBETA import SpotifyPlayer
 arduino = serial.Serial(port='COM3', baudrate=9600, timeout = 2)  # establish serial communication with arduino board
 player = SpotifyPlayer()
 
-player.call_refresh() # refresh token at beginning of each run
-playlist_num = 0      # start at the first playlist during setup
-send_info(player.playlist_name)     # send initial info
-
-
 def send_info(sending):
     arduino.flush()
     arduino.write(sending.encode())
     time.sleep(0.25)    # 250ms delay
+
+player.call_refresh() # refresh token at beginning of each run
+playlist_num = 0      # start at the first playlist during setup
+send_info(player.playlist_name)     # send initial info
 
 # continuously read data coming in from board and complete action based on specific (button) request
 while 1:
@@ -39,14 +38,14 @@ while 1:
             player.play_music()
             player.state = 2
 
-     # PLAYING MUSIC STATE
-     elif (player.state == 1):
-         if (recieving == 'SELECT\n'):     # (1): RESUME MUSIC
-             player.play_music()
-             player.state = 2
+    # PLAYING MUSIC STATE
+    elif (player.state == 1):
+        if (recieving == 'SELECT\n'):     # (1): RESUME MUSIC
+            player.resume_music()
+            player.state = 2
 
-     # CONTROLLING PLAYBACK STATE
-     else:
+    # CONTROLLING PLAYBACK STATE
+    else:
          if (recieving == 'SELECT\n'):   # (2): PAUSE
             player.pause_music()
             player.state = 1

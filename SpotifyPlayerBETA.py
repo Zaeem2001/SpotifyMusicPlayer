@@ -2,8 +2,6 @@ import json
 import requests
 from SpotipyRefresh import Refresh
 
-# THINGS TO ADD
-# (1) The first function I end up making should explain what each thing does (request.get/put/post, response, etc)
 class SpotifyPlayer:
 
         # initialize our class variables
@@ -13,9 +11,16 @@ class SpotifyPlayer:
             self.state = 0                  # state of player (0 = setup, 1 = playing music, 2 = controlling music)
 
             self.playlist_name = ""         # name of playlist being listened to
-            self.playlist_uri = ""          # uri of the playlist being listened to
+            self.playlist_uri = ""          # uri of  playlist being listened to
 
-        # set up the player: choose the playlist you would like to listen to
+            self.album_name = ""            # name of album being listened to
+            self.album_uri = ""             # uri of  album being listened to
+            self.track_name = ""            # name of track being listened to
+            self.track_num = 0              # track number in album
+            self.artists = ""               # artists of current track
+            self.current_time = 0           # current time of music played
+
+        # retrieves/sets user's playlist names and uris
         def get_playlists(self, item_num):
             #print("Getting user's playlists...")
 
@@ -35,71 +40,54 @@ class SpotifyPlayer:
             self.playlist_uri = playlists_data[item_num + 1]
             #print(playlists_data)
 
+        # retrieves/sets current playback info (album, track, progress)
+        def get_current_playback(self):
+            print("Getting current playback info...")
+
+            query = "https://api.spotify.com/v1/me/player/currently-playing"
+            response = requests.get(query, headers={"Content-Type": "application/json",
+                                                    "Authorization": "Bearer {}".format(self.spotify_token)})
+            response_json = response.json()
+
+            # update class variables
+            self.album_name = response_json["item"]["album"]["name"]
+            self.album_uri = response_json["item"]["album"]["external_urls"]["spotify"]
+            self.track_name = response_json["item"]["name"]
+            self.track_num = response_json["item"]["track_number"] - 1
+            self.artists = response_json["item"]["artists"][0]["name"]
+            self.current_time = response_json["progress_ms"]
+
         # start/resume music playback
         def play_music(self):
             print("Playing music...")
 
             query = "https://api.spotify.com/v1/me/player/play"
-            data = json.dumps({
-                "context_uri": self.playlist_uri, "offset": {"position": 0}})
+            data = json.dumps({"context_uri": self.playlist_uri, "offset": {"position": 0}})
+            response = requests.put(query, data, headers={"Content-Type": "application/json",
+                                                          "Authorization": "Bearer {}".format(self.spotify_token)})
+            #print(response)
+
+        def resume_music(self):
+            print("Resuming music...")
+
+            query = "https://api.spotify.com/v1/me/player/play"
+            data = json.dumps({"context_uri": self.album_uri,
+                               "offset": {"position": self.track_num},
+                               "position_ms": self.current_time})
             response = requests.put(query, data, headers={"Content-Type": "application/json",
                                                           "Authorization": "Bearer {}".format(self.spotify_token)})
             print(response)
 
-        # get available devices for music playback
-        def get_devices(self):
-            print("Getting devices...")
-
-            query = "https://api.spotify.com/v1/me/player/devices"
-
-            response = requests.get(query, headers={"Content-Type": "application/json",
-                                                    "Authorization": "Bearer {}".format(self.spotify_token)})
-            print(response.json()) 
-
-        # see if something is currently being played [NO LONGER GONNA BE USED, STILL USEFUL FOR NEXT FUNCTION]
-        def is_playing(self):
-            query = "https://api.spotify.com/v1/me/player/currently-playing"
-            response = requests.get(query, headers={"Content-Type": "application/json",
-                                                    "Authorization": "Bearer {}".format(self.spotify_token)})
-    
-            response_json = response.json() 
-            return response_json["is_playing"]
-
-        # #returns the album, song? + artist, and current track from the
-        # def get_current_playback(self):
-        #     query = "https://api.spotify.com/v1/me/player/currently-playing"
-        #     response = requests.get(query, headers={"Content-Type": "application/json",
-        #                                             "Authorization": "Bearer {}".format(self.spotify_token)})
-        #
-        #     response_json = response.json()
-        #     timestamp = response_json["progress_ms"]
-        #     album = response_json["album"]["external_urls"]["spotify"]
-        #
-        #     return timestamp, album
-                
-            
-        # get info on whats currently being played (playlist, track, progress)
-
-
-        # ANOTHER VERSION (PROTORYPE OF PLAYMUSIC WITH TIMER TO RESUME WHERE YOU STARTED
-        # def play_music(self, time):
-        #     print("Playing music...")
-        #
-        #     query = "https://api.spotify.com/v1/me/player/play"
-        #     data = json.dumps(
-        #         {"context_uri": "https://open.spotify.com/playlist/4AcN0VFB8fFNsec37lmM7x?si=281fb264c4a246be",
-        #          "offset": {"position": 0}})
-        #     response = requests.put(query, data, headers={"Content-Type": "application/json",
-        #                                                   "Authorization": "Bearer {}".format(self.spotify_token)})
-        #     # print(response.json())
-
         # pause music playback
         def pause_music(self):
             print("Pausing music...")
-            
+
+            self.get_current_playback() # call to get latest playback data
+
             query = "https://api.spotify.com/v1/me/player/pause"
-            response = requests.put(query, headers = {"Content-Type": "application/json", "Authorization": "Bearer {}".format(self.spotify_token)})
-            #print(response.json())
+            response = requests.put(query, headers={"Content-Type": "application/json",
+                                                    "Authorization": "Bearer {}".format(self.spotify_token)})
+            #print(response)
 
         # REFRESH ACCESS TOKEN
         def call_refresh(self):
