@@ -52,5 +52,5 @@ while 1:
             player.state = 1
 
          else:
-            time.sleep(1)               # POLLING EVERY 1 SECOND TO UPDATE TRACK AUTO
+            time.sleep(0.5)               # POLLING EVERY 500 MILLISECONDS TO UPDATE TRACK AUTO
             player.get_time()

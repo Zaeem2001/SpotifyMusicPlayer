@@ -72,9 +72,10 @@ class SpotifyPlayer:
             self.current_time = response_json["progress_ms"]
             self.duration_time = response_json["item"]["duration_ms"]
 
-            if (self.duration_time - self.current_time < 2000): # if song is within 2 seconds of finishing...
+            print(self.duration_time - self.current_time)
+            if (self.duration_time - self.current_time < 3000): # if song is within 3 seconds of finishing...
                 self.track_num += 1                             # update to next track
-                #print("This is the track {}".format(self.track_num))
+                print("This is the track {}".format(self.track_num))
 
 
         # choose what track will be played
