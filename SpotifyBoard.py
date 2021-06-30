@@ -13,6 +13,7 @@ def send_info(sending):
 
 player.call_refresh() # refresh token at beginning of each run
 playlist_num = 0      # start at the first playlist during setup
+player.set_playlist(playlist_num)
 send_info(player.playlist_name)     # send initial info
 
 # continuously read data coming in from board and complete action based on specific (button) request
@@ -24,14 +25,14 @@ while 1:
     # SET UP STATE
     if (player.state == 0):
 
-        if (recieving == 'LEFT\n' and playlist_num >= 2):       # (1): PREV PLAYLIST
-            playlist_num -= 2
-            player.get_playlists(playlist_num)
+        if (recieving == 'LEFT\n' and playlist_num >= 3):       # (1): PREV PLAYLIST
+            playlist_num -= 3
+            player.set_playlist(playlist_num)
             send_info(player.playlist_name)
 
-        elif (recieving == 'RIGHT\n' and playlist_num < 38):    # (2): NEXT PLAYLIST
-            playlist_num += 2
-            player.get_playlists(playlist_num)
+        elif (recieving == 'RIGHT\n' and playlist_num < 57):    # (2): NEXT PLAYLIST
+            playlist_num += 3
+            player.set_playlist(playlist_num)
             send_info(player.playlist_name)
 
         elif (recieving == 'SELECT\n'):     # (3): START MUSIC
@@ -41,7 +42,7 @@ while 1:
     # PLAYING MUSIC STATE
     elif (player.state == 1):
         if (recieving == 'SELECT\n'):     # (1): RESUME MUSIC
-            player.resume_music()
+            player.play_music()
             player.state = 2
 
     # CONTROLLING PLAYBACK STATE
