@@ -15,10 +15,10 @@ class SpotifyPlayer:
             self.playlist_uri = ""          # uri of  playlist being listened to
             self.playlist_id = ""           # id of playlist being listened to
 
-            self.track_data = []            # stores name, duration, artists of each track
+            self.track_data = []            # stores name and artists of each track
             self.track_name = ""            # name of track being listened to
-            self.track_num = 0              # track number in playlist
             self.artists = ""               # artists of current track
+            self.track_num = 0              # track number in playlist
 
             self.current_time = 0           # how far into the track you are
             self.duration_time = 0          # duration of track being listened to
@@ -60,7 +60,6 @@ class SpotifyPlayer:
             for item in response_json["items"]:
                 self.track_data.append(item["track"]["name"])
                 self.track_data.append(item["track"]["artists"][0]["name"])
-                self.track_data.append(item["track"]["duration_ms"])
 
         # gets current time of song being listened to
         def get_time(self):
@@ -71,13 +70,18 @@ class SpotifyPlayer:
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
             response_json = response.json()
             self.current_time = response_json["progress_ms"]
+            self.duration_time = response_json["item"]["duration_ms"]
+
+            if (self.duration_time - self.current_time < 2000): # if song is within 2 seconds of finishing...
+                self.track_num += 1                             # update to next track
+                #print("This is the track {}".format(self.track_num))
+
 
         # choose what track will be played
         def set_tracks(self, track_num):
             # update class variables
             self.track_name = self.track_data[track_num]
             self.artists = self.track_data[track_num + 1]
-            self.duration_time = self.track_data[track_num + 2]
 
         # start/resume music playback
         def play_music(self):
@@ -89,7 +93,7 @@ class SpotifyPlayer:
                                "position_ms": self.current_time})
             response = requests.put(query, data, headers={"Content-Type": "application/json",
                                                           "Authorization": "Bearer {}".format(self.spotify_token)})
-            #print(response)
+            print(response)
 
         # pause music playback
         def pause_music(self):
@@ -100,7 +104,6 @@ class SpotifyPlayer:
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
 
             self.get_time() # update current progress of track
-            #print(response)
 
         # REFRESH ACCESS TOKEN
         def call_refresh(self):
