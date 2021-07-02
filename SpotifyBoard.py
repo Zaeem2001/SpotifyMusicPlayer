@@ -30,12 +30,13 @@ while 1:
             player.set_playlist(playlist_num)
             send_info(player.playlist_name)
 
-        elif (recieving == 'RIGHT\n' and playlist_num < 57):    # (2): NEXT PLAYLIST
+        elif (recieving == 'RIGHT\n' and playlist_num < 38):    # (2): NEXT PLAYLIST
             playlist_num += 3
             player.set_playlist(playlist_num)
             send_info(player.playlist_name)
 
         elif (recieving == 'SELECT\n'):     # (3): START MUSIC
+            player.adjust_volume()
             player.play_music()
             player.state = 2
 
@@ -57,8 +58,14 @@ while 1:
          elif (recieving == 'LEFT\n'):    # (3): BACK
             player.prev_track()
 
+         elif (recieving == 'UP\n' and player.volume <= 95):      # (4): RAISE VOLUME
+            player.volume += 5
+            player.adjust_volume()
+
+         elif (recieving == 'DOWN\n' and player.volume >= 5):    # (5): LOWER VOLUME
+            player.volume -= 5
+            player.adjust_volume()
+
          else:
             time.sleep(0.5)               # POLLING EVERY 500 MILLISECONDS TO UPDATE TRACK AUTO
             player.get_time()
-
-         print(player.track_num)

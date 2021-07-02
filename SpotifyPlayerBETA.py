@@ -23,6 +23,8 @@ class SpotifyPlayer:
             self.current_time = 0           # how far into the track you are
             self.duration_time = 0          # duration of track being listened to
 
+            self.volume = 50                 # volume of playback
+
         # retrieves user's playlist names and uris
         def get_playlists(self):
             #print("Getting user's playlists...")
@@ -121,6 +123,16 @@ class SpotifyPlayer:
             response = requests.post(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
             self.track_num -= 1
+            #print(response)
+
+        # sets volume
+        def adjust_volume(self):
+            #print("Changing volume level...")
+
+            query = "https://api.spotify.com/v1/me/player/volume?volume_percent={}".format(self.volume)
+            response = requests.put(query, headers={"Content-Type": "application/json",
+                                                    "Authorization": "Bearer {}".format(self.spotify_token)})
+
             #print(response)
 
         # REFRESH ACCESS TOKEN
