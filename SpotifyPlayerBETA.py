@@ -132,4 +132,3 @@ class SpotifyPlayer:
             self.spotify_token = refreshCaller.refresh() # new access token created
 
             self.get_playlists()
-            print("test")
