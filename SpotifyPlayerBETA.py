@@ -106,6 +106,24 @@ class SpotifyPlayer:
 
             self.get_time() # update current progress of track
 
+        # go to next track
+        def next_track(self):
+            print("Skipping to next track...")
+
+            query = "https://api.spotify.com/v1/me/player/next"
+            response = requests.put(query, headers={"Content-Type": "application/json",
+                                                    "Authorization": "Bearer {}".format(self.spotify_token)})
+            self.track_num += 1
+
+        # go to previous track
+        def prev_track(self):
+            print("Skipping to next track...")
+
+            query = "https://api.spotify.com/v1/me/player/previous"
+            response = requests.put(query, headers={"Content-Type": "application/json",
+                                                    "Authorization": "Bearer {}".format(self.spotify_token)})
+            self.track_num -= 1
+
         # REFRESH ACCESS TOKEN
         def call_refresh(self):
             print ("Refreshing token...")
