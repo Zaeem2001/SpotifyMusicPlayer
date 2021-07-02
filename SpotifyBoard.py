@@ -47,10 +47,18 @@ while 1:
 
     # CONTROLLING PLAYBACK STATE
     elif (player.state == 2):
-         if (recieving == 'SELECT\n'):   # (2): PAUSE
+         if (recieving == 'SELECT\n'):    # (1): PAUSE
             player.pause_music()
             player.state = 1
+
+         elif (recieving == 'RIGHT\n'):   # (2): SKIP
+            player.next_track()
+
+         elif (recieving == 'LEFT\n'):    # (3): BACK
+            player.prev_track()
 
          else:
             time.sleep(0.5)               # POLLING EVERY 500 MILLISECONDS TO UPDATE TRACK AUTO
             player.get_time()
+
+         print(player.track_num)
