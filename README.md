@@ -34,13 +34,13 @@ the instruction by issuing requests to the Spotify server with the help of Spoti
 
 This project is a prototype. There are so so many ideas that come to mind when thinking about where I can go with this project:
 
-- Make it wireless! The USB connection isn't a constraint as the board does have to be within hand's reach. However, having the connection between PC and board be wireless
+- **Make it wireless!** The USB connection isn't a constraint as the board does have to be within hand's reach. However, having the connection between PC and board be wireless
   would allow for better wire management and more portability. This could be done with wifi or bluetooth modules that communicate with the Arduino.
   
-- Make it touch! Instead of pressing buttons, what if the user could swipe or tap a screen to control their music. Using a TFT touch-screen, controls and playback information could
+- **Make it touch!** Instead of pressing buttons, what if the user could swipe or tap a screen to control their music. Using a TFT touch-screen, controls and playback information could
   be laid out almost like a Spotify app. This would eliminate the need for buttons and the LCD screen, and of course, all the wires and resistors connecting them.
   
-- Make it simple! Originally I had planned for the board to only *control* track playback; go to the next track, previous track, or pause/resume playback. Eventually I let my
+- **Make it simple!** Originally I had planned for the board to only *control* track playback; go to the next track, previous track, or pause/resume playback. Eventually I let my
   imagination get the best of me and now I have a board that can also let you choose the playlist, control the volume, and display all this information. A lite version of this 
   project could be a simple remote that allows for a simpler control.
   
