@@ -68,8 +68,12 @@ class SpotifyPlayer:
         # retrieve track and artist names
         def set_tracks(self, track_num):
             # update class variables
-            self.track_name = self.track_data[track_num*2]
+            temp_name = self.track_data[track_num*2]
             self.artists = self.track_data[track_num*2 + 1]
+
+            self.track_name = temp_name.split('(')[0].split('-')        # get rid of brackets and dashes in song names
+            self.track_name = self.track_name[0]                        # this is to save space on LCD, make it look nicer
+
             print(self.track_name+":"+self.artists)
 
         # gets current time of song being listened to
@@ -85,6 +89,7 @@ class SpotifyPlayer:
 
             if (self.duration_time - self.current_time < 3000): # if song is within 3 seconds of finishing...
                 self.track_num += 1                             # update to next track
+                self.set_tracks(self.track_num)
 
         # start/resume music playback
         def play_music(self):

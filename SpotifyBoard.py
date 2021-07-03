@@ -39,18 +39,12 @@ while 1:
         elif (recieving == 'SELECT\n'):     # (3): START MUSIC
             player.adjust_volume()
             player.play_music()
-            send_info(player.artists)
-            time.sleep(1)
-            send_info(player.track_name)
             player.state = 2
 
     # PLAYING MUSIC STATE
     elif (player.state == 1):
         if (recieving == 'SELECT\n'):     # (1): RESUME MUSIC
             player.play_music()
-            Send_info(player.artists)
-            time.sleep(1)
-            send_info(player.track_name)
             player.state = 2
 
     # CONTROLLING PLAYBACK STATE
@@ -76,6 +70,7 @@ while 1:
          else:
             time.sleep(0.5)               # POLLING EVERY 500 MILLISECONDS TO UPDATE TRACK INFO
             player.get_time()
-            send_info(player.artists)
+
+            send_info(player.track_name)     # FLASH ARTIST AND TRACK NAME
             time.sleep(1)
-            send_info(player.track_name)
+            send_info(player.artists)
