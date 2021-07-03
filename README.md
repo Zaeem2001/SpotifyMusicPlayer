@@ -17,6 +17,7 @@ the instruction by issuing requests to the Spotify server with the help of Spoti
 ### How do I use it?
 
 1. Connect the Arduino and board to your PC running the desktop application for Spotify, and then run the Python script.
+   
    *NOTE: You still need the desktop application installed and running in order to use this board. This is NOT a replacement for the software itself.*
    
 2. Cycle through your playlists with the left and right buttons and then choose the playlist you would like to listen to with the select button. The playlist name will 
