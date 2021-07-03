@@ -47,21 +47,30 @@ class SpotifyPlayer:
             self.playlist_uri = self.playlists_data[item_num + 1]
             self.playlist_id = self.playlists_data[item_num + 2]
 
+            print(self.playlist_id)
             self.get_tracks()
 
-        # retrieves track data (name, artist, duration)
+        # retrieves track data
         def get_tracks(self):
             #print("Getting track data...")
+            self.track_data = [] # empty out previous track data
 
             query = "https://api.spotify.com/v1/playlists/{}/tracks".format(self.playlist_id)
             response = requests.get(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
             response_json = response.json()
 
-            #  add all track names, numbers, and artists from playlist into a list
+            #  add all track names and artists from playlist into a list
             for item in response_json["items"]:
                 self.track_data.append(item["track"]["name"])
                 self.track_data.append(item["track"]["artists"][0]["name"])
+
+        # retrieve track and artist names
+        def set_tracks(self, track_num):
+            # update class variables
+            self.track_name = self.track_data[track_num*2]
+            self.artists = self.track_data[track_num*2 + 1]
+            print(self.track_name+":"+self.artists)
 
         # gets current time of song being listened to
         def get_time(self):
@@ -77,12 +86,6 @@ class SpotifyPlayer:
             if (self.duration_time - self.current_time < 3000): # if song is within 3 seconds of finishing...
                 self.track_num += 1                             # update to next track
 
-        # choose what track will be played
-        def set_tracks(self, track_num):
-            # update class variables
-            self.track_name = self.track_data[track_num]
-            self.artists = self.track_data[track_num + 1]
-
         # start/resume music playback
         def play_music(self):
             #print("Playing music...")
@@ -93,6 +96,7 @@ class SpotifyPlayer:
                                "position_ms": self.current_time})
             response = requests.put(query, data, headers={"Content-Type": "application/json",
                                                           "Authorization": "Bearer {}".format(self.spotify_token)})
+            self.set_tracks(self.track_num)
             #print(response)
 
         # pause music playback
@@ -113,6 +117,7 @@ class SpotifyPlayer:
             response = requests.post(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
             self.track_num += 1
+            self.set_tracks(self.track_num)
             #print(response)
 
         # go to previous track
@@ -123,6 +128,7 @@ class SpotifyPlayer:
             response = requests.post(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
             self.track_num -= 1
+            self.set_tracks(self.track_num)
             #print(response)
 
         # sets volume

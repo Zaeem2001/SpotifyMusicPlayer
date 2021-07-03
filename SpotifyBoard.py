@@ -11,6 +11,7 @@ def send_info(sending):
     arduino.write(sending.encode())
     time.sleep(0.25)    # 250ms delay
 
+time.sleep(1)
 player.call_refresh() # refresh token at beginning of each run
 playlist_num = 0      # start at the first playlist during setup
 player.set_playlist(playlist_num)
@@ -38,12 +39,18 @@ while 1:
         elif (recieving == 'SELECT\n'):     # (3): START MUSIC
             player.adjust_volume()
             player.play_music()
+            send_info(player.artists)
+            time.sleep(1)
+            send_info(player.track_name)
             player.state = 2
 
     # PLAYING MUSIC STATE
     elif (player.state == 1):
         if (recieving == 'SELECT\n'):     # (1): RESUME MUSIC
             player.play_music()
+            Send_info(player.artists)
+            time.sleep(1)
+            send_info(player.track_name)
             player.state = 2
 
     # CONTROLLING PLAYBACK STATE
@@ -55,7 +62,7 @@ while 1:
          elif (recieving == 'RIGHT\n'):   # (2): SKIP
             player.next_track()
 
-         elif (recieving == 'LEFT\n'):    # (3): BACK
+         elif (recieving == 'LEFT\n' and player.track_num != 0):    # (3): BACK
             player.prev_track()
 
          elif (recieving == 'UP\n' and player.volume <= 95):      # (4): RAISE VOLUME
@@ -67,5 +74,8 @@ while 1:
             player.adjust_volume()
 
          else:
-            time.sleep(0.5)               # POLLING EVERY 500 MILLISECONDS TO UPDATE TRACK AUTO
+            time.sleep(0.5)               # POLLING EVERY 500 MILLISECONDS TO UPDATE TRACK INFO
             player.get_time()
+            send_info(player.artists)
+            time.sleep(1)
+            send_info(player.track_name)
