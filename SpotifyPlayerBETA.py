@@ -47,7 +47,6 @@ class SpotifyPlayer:
             self.playlist_uri = self.playlists_data[item_num + 1]
             self.playlist_id = self.playlists_data[item_num + 2]
 
-            print(self.playlist_id)
             self.get_tracks()
 
         # retrieves track data
@@ -73,8 +72,6 @@ class SpotifyPlayer:
 
             self.track_name = temp_name.split('(')[0].split('-')        # get rid of brackets and dashes in song names
             self.track_name = self.track_name[0]                        # this is to save space on LCD, make it look nicer
-
-            print(self.track_name+":"+self.artists)
 
         # gets current time of song being listened to
         def get_time(self):
