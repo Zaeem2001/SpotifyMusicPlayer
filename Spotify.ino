@@ -6,7 +6,7 @@ String screen_info;
 
 void setup() {
   Serial.begin(9600);
-  Serial.setTimeout(2);
+  Serial.setTimeout(5);
   pinMode(6, INPUT); // set pin 6 to be input to push button down
   pinMode(5, INPUT); // set pin 5 to be input to push button right
   pinMode(4, INPUT); // set pin 4 to be input to push button select
