@@ -44,3 +44,4 @@ This project is a prototype. There are so so many ideas that come to mind when t
   imagination get the best of me and now I have a board that can also let you choose the playlist, control the volume, and display all this information. A lite version of this 
   project could be a simple remote that allows for a simpler control.
   
+### Visit https://zaeem2001.github.io/projects/spotifyplayer.html to see my project in action!
