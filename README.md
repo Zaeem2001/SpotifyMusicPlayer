@@ -20,8 +20,18 @@ There are two ways to obtain authorization for Spotify; a temporary token that e
 The temporary token is a lot easier to accquire, but it can also be tedious having to create and enter a new one after every hour. The permanent token takes more time, but for an application like this, that may be used several times a day, its well worth it.
 
 TEMPORARY TOKEN
-1.
+1. Go to https://developer.spotify.com/console/get-several-albums/ and scroll to "OAuth Token" near the bottom of the page.
 
+2. Select "get token" and choose the following scopes: user-modify-playback-state, user-read-currently-playing, user-read-playback-state, playlist-read-private, and playlist-read-collaborative. The generated token should show up in the input parameter right next to the "get token" button.
+
+3. In the "SpotifyPlayerBETA.py" file, copy and paste your token into the variable "self.spotify_token".
+
+4. Comment out or delete all instances of "SpotipyRefresh" or anything pertaining to it:
+   - "from SpotipyRefresh import Refresh" beginning of file.
+   - The entirety of the "call_refresh" function at the end of the file.
+
+5. Finally, in the "SpotifyBoard.py" file, change "player.call_refresh()" at line 19 to "player.get_playlists". Now you can run the code without the "SpotipyRefresh.py" and "SpotipySecrets.py" files.
+   
 PERMANENT TOKEN
 1. Create a new app through the SpotifyforDevelopers page (https://developer.spotify.com/dashboard/), the name and description doesn't matter.
    
@@ -43,7 +53,7 @@ curl -H "Authorization: Basic BASE64" -d grant_type=authorization_code -d code=C
 
    - The "BASE64" parameter is the "client id:client secret" encoded in base 64. Your client secret can be found in your app page under client ID. Simply copy and paste the client id followed by a semi-colon and then the client secret (no spaces before, after, or between) into https://www.base64encode.org/ and encode. Copy and paste this into "SpotipySecrets.py" as the variable "base_64".
 
-6. FINALLY, Copy and paste the completed CURL request into Windows command line. It should return a bunch of text that includes your access token, scope, and refresh token. What we're interested in however is the refresh token, so copy and paste that into "SpotipySecrets.py" as the variable "refresh_token". Your "SpotipySecrets.py" file should contain only those two variables (just like the one provided in this repository). All you have to do now is run the code!
+6. Finally, Copy and paste the completed CURL request into Windows command line. It should return a bunch of text that includes your access token, scope, and refresh token. What we're interested in however is the refresh token, so copy and paste that into "SpotipySecrets.py" as the variable "refresh_token". Your "SpotipySecrets.py" file should contain only those two variables (just like the one provided in this repository). All you have to do now is run the code!
  
 ### How do I use it?
 
