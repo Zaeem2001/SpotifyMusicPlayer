@@ -14,6 +14,37 @@ the PC that's running the Spotify desktop application and Python script. The LCD
 Each button press on the board is detected by the Arduino which sends the corresponding instruction to the Python script via USB (UART communciation). The Python script follows
 the instruction by issuing requests to the Spotify server with the help of Spotify web API. If needed, the script will send data back to the Arduino to update the LCD display.
 
+### How to get an authorization token?
+
+There are two ways to obtain authorization for Spotify; a temporary token that expires in roughly 1 hour, or a permanent (refreshing) token that won't expire for a *long* time.
+The temporary token is a lot easier to accquire, but it can also be tedious having to create and enter a new one after every hour. The permanent token takes more time, but for an application like this, that may be used several times a day, its well worth it.
+
+TEMPORARY TOKEN
+1.
+
+PERMANENT TOKEN
+1. Create a new app through the SpotifyforDevelopers page (https://developer.spotify.com/dashboard/), the name and description doesn't matter.
+   
+   *NOTE: You will need to have a Spotify account and login*
+
+2. Go to your app's page, then to "edit settings", then to "redirect URIs" and enter a URL. This will be a link to a page that you will be redirected to during the authorization process. This URL doesn't have to be to a real website so choose anything!
+
+3. Fill in the client ID and redirect URI parameters for the following authorization request: 
+https://accounts.spotify.com/authorize?client_id=CLIENTID&response_type=code&redirect_uri=REDIRECTURI&scope=user-modify-playback-state%20user-read-currently-playing%20user-read-playback-state%20playlist-read-private%20playlist-read-collaborative
+
+   - The client ID can be found in your app page (left side, under "App Status").
+   - The redirect URI is the URI you chose in the app settings (step 2), however it must be URL encoded! Simply copy and paste the plain URL into https://www.urlencoder.org/ and encode.
+
+4. Copy and paste the request from step 3 into your browser. This will take you to your redirect URI which will now contain the parameter "code" to be extracted; 
+   ex. URI?code=uRf6VG9V8c3lTJMoL...    => extract the "uRf6VG9V8c3lTJMoL..."
+
+5. Fill in the base 64 paramter, the code (extracted from step 4), and the redirect URI (encoded same as step 3) in the following CURL request:
+curl -H "Authorization: Basic BASE64" -d grant_type=authorization_code -d code=CODE -d redirect_uri=URI https://accounts.spotify.com/api/token --ssl-no-revoke
+
+   - The "BASE64" parameter is the "client id:client secret" encoded in base 64. Your client secret can be found in your app page under client ID. Simply copy and paste the client id followed by a semi-colon and then the client secret (no spaces before, after, or between) into https://www.base64encode.org/ and encode. Copy and paste this into "SpotipySecrets.py" as the variable "base_64".
+
+6. FINALLY, Copy and paste the completed CURL request into Windows command line. It should return a bunch of text that includes your access token, scope, and refresh token. What we're interested in however is the refresh token, so copy and paste that into "SpotipySecrets.py" as the variable "refresh_token". Your "SpotipySecrets.py" file should contain only those two variables (just like the one provided in this repository). All you have to do now is run the code!
+ 
 ### How do I use it?
 
 1. Connect the Arduino and board to your PC running the desktop application for Spotify, and then run the Python script.
