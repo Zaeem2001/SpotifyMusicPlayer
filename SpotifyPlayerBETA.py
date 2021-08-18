@@ -27,8 +27,6 @@ class SpotifyPlayer:
 
         # retrieves user's playlist names and uris
         def get_playlists(self):
-            #print("Getting user's playlists...")
-
             query = "https://api.spotify.com/v1/users/{}/playlists".format(self.user_id)
             response = requests.get(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
@@ -51,7 +49,6 @@ class SpotifyPlayer:
 
         # retrieves track data
         def get_tracks(self):
-            #print("Getting track data...")
             self.track_data = [] # empty out previous track data
 
             query = "https://api.spotify.com/v1/playlists/{}/tracks".format(self.playlist_id)
@@ -75,8 +72,6 @@ class SpotifyPlayer:
 
         # gets current time of song being listened to
         def get_time(self):
-            #print("Getting current time of track...")
-
             query = "https://api.spotify.com/v1/me/player/currently-playing"
             response = requests.get(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
@@ -90,8 +85,6 @@ class SpotifyPlayer:
 
         # start/resume music playback
         def play_music(self):
-            #print("Playing music...")
-
             query = "https://api.spotify.com/v1/me/player/play"
             data = json.dumps({"context_uri": self.playlist_uri,
                                "offset": {"position": self.track_num},
@@ -99,12 +92,9 @@ class SpotifyPlayer:
             response = requests.put(query, data, headers={"Content-Type": "application/json",
                                                           "Authorization": "Bearer {}".format(self.spotify_token)})
             self.set_tracks(self.track_num)
-            #print(response)
 
         # pause music playback
         def pause_music(self):
-            #print("Pausing music...")
-
             query = "https://api.spotify.com/v1/me/player/pause"
             response = requests.put(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
@@ -113,40 +103,28 @@ class SpotifyPlayer:
 
         # go to next track
         def next_track(self):
-            #print("Skipping to next track...")
-
             query = "https://api.spotify.com/v1/me/player/next"
             response = requests.post(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
             self.track_num += 1
             self.set_tracks(self.track_num)
-            #print(response)
 
         # go to previous track
         def prev_track(self):
-            #print("Skipping to prev track...")
-
             query = "https://api.spotify.com/v1/me/player/previous"
             response = requests.post(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
             self.track_num -= 1
             self.set_tracks(self.track_num)
-            #print(response)
 
         # sets volume
         def adjust_volume(self):
-            #print("Changing volume level...")
-
             query = "https://api.spotify.com/v1/me/player/volume?volume_percent={}".format(self.volume)
             response = requests.put(query, headers={"Content-Type": "application/json",
                                                     "Authorization": "Bearer {}".format(self.spotify_token)})
 
-            #print(response)
-
         # REFRESH ACCESS TOKEN
-        def call_refresh(self):
-            #print ("Refreshing token...")
-            
+        def call_refresh(self):            
             refreshCaller = Refresh()
             self.spotify_token = refreshCaller.refresh() # new access token created
 
