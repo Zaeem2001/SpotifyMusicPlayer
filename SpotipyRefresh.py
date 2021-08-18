@@ -8,9 +8,9 @@ class Refresh:
 
     # initialize class variables
     def __init__(self):
-        self.refresh_token = "AQDr060RMsTXy0T2hLbhQ_60u6Qdl58P5JCH1n0WXcX4LFgNHaV7RSUTKPSVpBa7qHXdvkc-OZC6eanTZQxaKDbTy6BN8cIdo1o9cw6qF1El9CRGnIZ7EJl2oRy_MKmU5rk" 
-        self.base_64 = "NDA2ZGJlNzI2NDIzNGU1OTgyNGY5MWFhM2ZkZWJiYjg6MjlhOGNmYTU2Njc2NDgxNGExOTI5Y2RkYWUyNjJhODA="   # base 64 (client id:client secret)
-
+        self.refresh_token = refresh_token
+        self.base_64 = base_64   # base 64 (client id:client secret)
+        
     # refreshes token
     def refresh(self):
 
