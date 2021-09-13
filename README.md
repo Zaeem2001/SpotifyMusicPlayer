@@ -7,12 +7,16 @@ The purpose of this project was to create a physical board/player that controls 
 the Spotify desktop app just to skip a song. Or waiting forever for the sound overlay to disappear after adjusting your volume. With control's literally within your hand's reach,
 Spotify playback has never been easier!
 
+-----
+
 ### How does it work?
 
 The board itself consists of 5 push buttons (wired as pull-down resistors) and an LCD screen connected to an Arduino UNO microcontroller. The Arduino is then connected via USB to
 the PC that's running the Spotify desktop application and Python script. The LCD screen is used to display playback information such as playlist name, track name, and artists. 
 Each button press on the board is detected by the Arduino which sends the corresponding instruction to the Python script via USB (UART communciation). The Python script follows
 the instruction by issuing requests to the Spotify server with the help of Spotify web API. If needed, the script will send data back to the Arduino to update the LCD display.
+
+-----
 
 ### How to get an authorization token?
 
@@ -54,7 +58,9 @@ curl -H "Authorization: Basic BASE64" -d grant_type=authorization_code -d code=C
    - The "BASE64" parameter is the "client id:client secret" encoded in base 64. Your client secret can be found in your app page under client ID. Simply copy and paste the client id followed by a semi-colon and then the client secret (no spaces before, after, or between) into https://www.base64encode.org/ and encode. Copy and paste this into "SpotipySecrets.py" as the variable "base_64".
 
 6. Finally, Copy and paste the completed CURL request into Windows command line. It should return a bunch of text that includes your access token, scope, and refresh token. What we're interested in however is the refresh token, so copy and paste that into "SpotipySecrets.py" as the variable "refresh_token". Your "SpotipySecrets.py" file should contain only those two variables (just like the one provided in this repository). All you have to do now is run the code!
- 
+
+-----
+
 ### How do I use it?
 
 1. Connect the Arduino and board to your PC running the desktop application for Spotify, and then run the Python script.
@@ -71,6 +77,8 @@ curl -H "Authorization: Basic BASE64" -d grant_type=authorization_code -d code=C
    - up to turn up the volume
    - down to turn down the volume 
 
+-----
+
 ### Future changes:
 
 This project is a prototype. There are so so many ideas that come to mind when thinking about where I can go with this project:
@@ -84,5 +92,7 @@ This project is a prototype. There are so so many ideas that come to mind when t
 - **Make it simple!** Originally I had planned for the board to only *control* track playback; go to the next track, previous track, or pause/resume playback. Eventually I let my
   imagination get the best of me and now I have a board that can also let you choose the playlist, control the volume, and display all this information. A lite version of this 
   project could be a simple remote that allows for a simpler control.
-  
+
+-----
+
 ### Visit [my website](https://zaeem2001.github.io/projects/spotifyplayer.html) to see my project in action!
